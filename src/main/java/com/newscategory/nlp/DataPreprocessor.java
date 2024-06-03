@@ -51,6 +51,11 @@ public class DataPreprocessor {
         return String.join(" ", words);
     }
 
+    //Remove new lines
+    public static String removeNewLines(String text) {
+        return text.replaceAll("\\r?\\n", " ");
+    }
+
     public static String lemmatizeText(StanfordCoreNLP pipeline, String text) {
         CoreDocument coreDocument = new CoreDocument(text);
         pipeline.annotate(coreDocument);

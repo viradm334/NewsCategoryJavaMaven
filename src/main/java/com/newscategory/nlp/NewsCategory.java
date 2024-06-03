@@ -35,6 +35,7 @@ public class NewsCategory {
                     lines[1] = DataPreprocessor.removeSpecialCharacters(lines[1]);
                     lines[1] = DataPreprocessor.lowerCase(lines[1]);
                     lines[1] = DataPreprocessor.removeStopwords(lines[1]);
+                    lines[1] = DataPreprocessor.removeNewLines(lines[1]);
 
                     // Tokenization and lemmatization
                     lines[1] = DataPreprocessor.lemmatizeText(stanfordCoreNLP, lines[1]);
