@@ -1,56 +1,46 @@
 package com.newscategory.nlp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class DataSplitter {
-    public static TrainTestData splitData(List<String[]> data, double testSize, long randomSeed) {
-        List<String> xList = new ArrayList<>();
-        List<String> yList = new ArrayList<>();
+    public static DataSplitResult splitData(int[][] x, int[] y, double testSize, int randomState) {
+        int totalSize = x.length;
+        int testSizeCount = (int) (totalSize * testSize);
 
-        // Extract text and category from the dataset
-        for (String[] row : data) {
-            xList.add(row[1]); // Text is in the second column
-            yList.add(row[2]); // Category is in the third column
+        List<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < totalSize; i++) {
+            indices.add(i);
         }
 
-        // Convert lists to arrays
-        String[] x = xList.toArray(new String[0]);
-        String[] y = yList.toArray(new String[0]);
+        Collections.shuffle(indices, new Random(randomState));
 
-        // Print shapes (optional)
-        System.out.println("X.shape = " + x.length);
-        System.out.println("y.shape = " + y.length);
+        int[][] xTrain = new int[totalSize - testSizeCount][x[0].length]; // Ensure correct size
+        int[][] xTest = new int[testSizeCount][x[0].length]; // Ensure correct size
+        int[] yTrain = new int[totalSize - testSizeCount];
+        int[] yTest = new int[testSizeCount];
 
-        // Train-test split
-        double testRatio = testSize;
-        int trainSize = (int) Math.ceil(x.length * (1 - testRatio));
-        String[] xTrain = new String[trainSize];
-        String[] xTest = new String[x.length - trainSize];
-        String[] yTrain = new String[trainSize];
-        String[] yTest = new String[x.length - trainSize];
+        for (int i = 0; i < totalSize - testSizeCount; i++) {
+            xTrain[i] = x[indices.get(i)];
+            yTrain[i] = y[indices.get(i)];
+        }
+        for (int i = 0; i < testSizeCount; i++) {
+            xTest[i] = x[indices.get(totalSize - testSizeCount + i)];
+            yTest[i] = y[indices.get(totalSize - testSizeCount + i)];
+        }
 
-        // Populate train and test datasets
-        System.arraycopy(x, 0, xTrain, 0, trainSize);
-        System.arraycopy(x, trainSize, xTest, 0, x.length - trainSize);
-        System.arraycopy(y, 0, yTrain, 0, trainSize);
-        System.arraycopy(y, trainSize, yTest, 0, x.length - trainSize);
-
-        // Print sizes (optional)
-        System.out.println("x_train size = " + xTrain.length);
-        System.out.println("x_test size = " + xTest.length);
-
-        // Return train-test data
-        return new TrainTestData(xTrain, xTest, yTrain, yTest);
+        return new DataSplitResult(xTrain, xTest, yTrain, yTest);
     }
 
-    public static class TrainTestData {
-        String[] xTrain;
-        String[] xTest;
-        String[] yTrain;
-        String[] yTest;
+    static class DataSplitResult {
+        int[][] xTrain;
+        int[][] xTest;
+        int[] yTrain;
+        int[] yTest;
 
-        public TrainTestData(String[] xTrain, String[] xTest, String[] yTrain, String[] yTest) {
+        DataSplitResult(int[][] xTrain, int[][] xTest, int[] yTrain, int[] yTest) {
             this.xTrain = xTrain;
             this.xTest = xTest;
             this.yTrain = yTrain;
