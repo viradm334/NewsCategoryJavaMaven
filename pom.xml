@@ -40,24 +40,6 @@
             <artifactId>opencsv</artifactId>
             <version>5.5.2</version>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
     </dependencies>
-
-    <!-- <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>com.newscategory.nlp.DataPreprocessor</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build> -->
 
 </project>
