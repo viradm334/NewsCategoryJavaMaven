@@ -53,5 +53,52 @@ public class NewsCategory {
             String[] secondRow = data.get(1);
             System.out.println(secondRow[1]);
         }
+        // Print the dataset after text preprocessing
+        printDataset(data);
+
+        // Split the dataset into training and test sets
+        DataSplitter.TrainTestData splitData = DataSplitter.splitData(data, 0.3, 0);
+
+        // Obtain train-test data
+        String[] xTrain = splitData.xTrain;
+        String[] xTest = splitData.xTest;
+
+        // Print sizes of training and test sets (optional)
+        System.out.println("Train : " + xTrain.length);
+        System.out.println("Test : " + xTest.length);
+    }
+
+    private static void printDataset(List<String[]> data) {
+        // Print header
+        System.out.println("ArticleId\tText\tCategory\tCategoryId");
+
+        // Print the rows of the dataset
+        for (String[] row : data) {
+            String articleId = row[0];
+            String text = row[1];
+            String category = row[2];
+            int categoryId = getCategoryId(category);
+
+            System.out.println(articleId + "\t" + text + "\t" + category + "\t" + categoryId);
+        }
+
+        System.out.println(data.size() + " rows × 4 columns");
+    }
+
+    private static int getCategoryId(String category) {
+        switch (category.toLowerCase()) {
+            case "business":
+                return 0;
+            case "tech":
+                return 1;
+            case "politics":
+                return 2;
+            case "sport":
+                return 3;
+            case "entertainment":
+                return 4;
+            default:
+                return -1;
+        }
     }
 }
