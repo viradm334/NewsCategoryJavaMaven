@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class DecisionTreeTrainer {
 	HashMap<Integer, ArrayList<String>> discreteValues;
 	String class1, class2;
-	ArrayList<String[]> data, testData;// data = training data
+	ArrayList<String[]> data, testData;
 	Node root;
 	double trainingTime = 0, precision, recall, fscore, accuracy;
 	int noOfNodes;
@@ -154,5 +154,31 @@ public class DecisionTreeTrainer {
 			}
 		}
 		return ans;
+	}
+
+	static class Node {
+		int attribute;
+		ArrayList<String[]> data;
+		boolean isLeaf;
+		int noOfClass1, noOfClass2;
+		Node[] children;
+		ArrayList<Integer> remainingAttributes;
+		double entropy;
+		int classification;
+
+		static int predictClass(Node root, String[] instance, HashMap<Integer, ArrayList<String>> discreteValues) {
+			if (root.isLeaf)
+				return root.classification;
+
+			int attributeValueIndex = discreteValues.get(root.attribute).indexOf(instance[root.attribute]);
+
+			if (attributeValueIndex != -1 && root.children[attributeValueIndex] != null)
+				return predictClass(root.children[attributeValueIndex], instance, discreteValues);
+
+			// If instance value not found or child node does not exist, return majority
+			// class
+			return root.noOfClass1 >= root.noOfClass2 ? 1 : 2;
+		}
+
 	}
 }
